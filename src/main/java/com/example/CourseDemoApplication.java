@@ -8,6 +8,7 @@ public class CourseDemoApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(CourseDemoApplication.class, args);
+        System.out.println("yyyyyyyy");
     }
 
 }
