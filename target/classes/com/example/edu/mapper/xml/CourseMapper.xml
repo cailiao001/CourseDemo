@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.edu.mapper.ICourseMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.example.edu.entity.Course">
+        <id column="id" property="id" />
+        <result column="course_cno" property="courseCno" />
+        <result column="course_name" property="courseName" />
+        <result column="parent_id" property="parentId" />
+        <result column="teacher_id" property="teacherId" />
+        <result column="recruits_plan" property="recruitsPlan" />
+        <result column="recruits_actual" property="recruitsActual" />
+        <result column="recruits_request" property="recruitsRequest" />
+        <result column="is_valid" property="isValid" />
+        <result column="is_deleted" property="isDeleted" />
+        <result column="sort" property="sort" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <resultMap id="CourseVoResultMap" type="com.example.edu.vo.CourseVo" extends="BaseResultMap">
+<!--        <result column="teacher_name" property="teacherName"/>-->
+        <association property="teacher" javaType="com.example.sys.entity.Teacher">
+            <id column="tid" property="id"/>
+            <result column="work_no" property="workNo"/>
+            <result column="name" property="name"/>
+            <result column="sex" property="sex"/>
+            <result column="mobile" property="mobile"/>
+            <result column="tch_create_time" property="createTime"/>
+            <result column="tch_update_time" property="updateTime"/>
+            <result column="tch_is_deleted" property="isDeleted"/>
+        </association>
+    </resultMap>
+
+    <select id="listCourse" resultType="com.example.edu.entity.Course">
+        select * from edu_course
+    </select>
+
+    <!--<select id="listCourseVo" resultMap="CourseVoResultMap">
+        SELECT edu_course.*,sys_teacher.name teacher_name FROM edu_course,sys_teacher WHERE edu_course.teacher_id=sys_teacher.id AND sys_teacher.is_deleted=0
+    </select>-->
+    <select id="listCourseVo" resultMap="CourseVoResultMap" parameterType="integer">
+        SELECT *,tch.id tid,tch.create_time tch_create_time, tch.update_time tch_update_time,tch.is_deleted tch_is_deleted
+        FROM edu_course crs,sys_teacher tch
+        WHERE crs.teacher_id=tch.id AND tch.is_deleted=0 and crs.id=#{id};
+    </select>
+
+</mapper>

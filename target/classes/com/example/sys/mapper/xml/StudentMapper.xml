@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.sys.mapper.IStudentMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.example.sys.entity.Student">
+        <id column="id" property="id" />
+        <result column="mobile" property="mobile" />
+        <result column="user_name" property="userName" />
+        <result column="sex" property="sex" />
+        <result column="age" property="age" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+        <result column="is_deleted" property="isDeleted" />
+    </resultMap>
+
+    <resultMap id="studentCourseVoMap" type="com.example.sys.vo.StudentCourseVo" extends="BaseResultMap">
+        <collection property="courseList" ofType="com.example.edu.entity.Course">
+            <id column="crs_id" property="id" />
+            <result column="course_cno" property="courseCno" />
+            <result column="course_name" property="courseName" />
+            <result column="parent_id" property="parentId" />
+            <result column="teacher_id" property="teacherId" />
+            <result column="recruits_plan" property="recruitsPlan" />
+            <result column="recruits_actual" property="recruitsActual" />
+            <result column="recruits_request" property="recruitsRequest" />
+            <result column="is_valid" property="isValid" />
+            <result column="crs_is_deleted" property="isDeleted" />
+            <result column="sort" property="sort" />
+            <result column="crs_create_time" property="createTime" />
+            <result column="crs_update_time" property="updateTime" />
+        </collection>
+    </resultMap>
+
+    <select id="studentCourseVoList" resultMap="studentCourseVoMap" parameterType="integer">
+        SELECT stu.*,crs.*,crs.id crs_id,crs.create_time crs_create_time,crs.update_time crs_update_time,crs.is_deleted crs_is_deleted
+        FROM edu_course crs,edu_course_studyhistory csy,sys_student stu
+        WHERE crs.id=csy.course_id AND stu.id=csy.student_id and stu.id=#{id}
+
+    </select>
+
+</mapper>
